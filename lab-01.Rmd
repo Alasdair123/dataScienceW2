@@ -199,14 +199,13 @@ visitors %>%
 _Perform the same calculation for the 2021 admissions data._
 
 ```{r Ex_h}
-#visitors %>% 
-#  ______(
-#    __________,
-#    __________
-#  )
+visitors %>% 
+  summarise(
+    mean_2021 = mean(n_2021, na.rm = TRUE),
+    mean_2021 = mean(n_2021, na.rm = TRUE)
+  )
 ```
 
-All values in the output are `NA`!
 
 ### Exercise i.
 
@@ -214,7 +213,7 @@ _What does `NA` stand for and why are you getting this as your answer to the pre
 
 **Write your answer here**
 
-
+NA can be a placeholder for a missing value. It couldn't calculate the the mean because some value is missing in the data. And so the operations returned NA.
 
 
 ### Exercise j.
@@ -223,7 +222,7 @@ _Look at the help pages for the `mean()` and `median()` commands to see what the
 
 **Write your answer here**
 
-
+Already completed in part i exercise.
 
 
 ## Question 7
@@ -236,6 +235,7 @@ visitors %>%
   summarise(
     mean_2022 = mean(n_2022),
     med_2022 = median(n_2022)
+#     %>% filter(max(mean_2022))
   )
 ```
 
@@ -245,16 +245,18 @@ _Observe in question 6 that the mean statistics across all settings are much lar
 
 **Write your answer here**
 
+The median doesn't take into account outliers whereas the mean does.
+
 ## Question 8
 
 ### Exercise l.
 
 ```{r Q8}
-#visitors %>% 
-#  summarise(
-#     __________,
-#     __________,
-#  )
+visitors %>% 
+  summarise(
+     max_2021 = max(n_2021, na.rm = TRUE),
+     min_2021 = min(n_2021, na.rm = TRUE),
+  )
 ```
 
 ## Question 9
@@ -285,10 +287,12 @@ _How many tourist attractions are there in each of the 4 nations? From this, dis
 
 
 ```{r Ex_l}
-#________ %>%
-#  ______(_______)
+visitors_with_nations %>%
+  group_by(nation)  %>%
+    count()
 ```
 
+The inter-quartile estimates may be inaccurate because there is little comparative differencce between visitors yet large differences in the number of attractions.
 
 
 # Challenging Exercises
