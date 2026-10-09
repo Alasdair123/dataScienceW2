@@ -368,15 +368,6 @@ visitors &lt;- read_csv(&quot;data/UK-visitor-numbers.csv&quot;)</code></pre>
 <h1>Wrangling Data</h1>
 <div id="warm-up" class="section level2">
 <h2>Warm up</h2>
-<pre class="r"><code>visitors &lt;- read_csv(&quot;data/UK-visitor-numbers.csv&quot;)</code></pre>
-<pre><code>## Rows: 348 Columns: 6
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr (4): attraction, admission, setting, region
-## dbl (2): n_2021, n_2022
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <pre class="r"><code>nondups &lt;- filter(visitors, !duplicated(attraction))
 nondups</code></pre>
 <pre><code>## # A tibble: 348 × 6
@@ -393,30 +384,12 @@ nondups</code></pre>
 ##  9 Ashmolean Museum Oxford                212497 728006 Free      I       South…
 ## 10 Aston Hall                              17789  37490 Members   M       West …
 ## # ℹ 338 more rows</code></pre>
-<pre class="r"><code>visitors &lt;- read_csv(&quot;data/UK-visitor-numbers.csv&quot;)</code></pre>
-<pre><code>## Rows: 348 Columns: 6
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr (4): attraction, admission, setting, region
-## dbl (2): n_2021, n_2022
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <pre class="r"><code>highestVisitors2022 &lt;- filter(visitors, n_2022 == max(n_2022, na.rm = TRUE))
 highestVisitors2022</code></pre>
 <pre><code>## # A tibble: 1 × 6
 ##   attraction                            n_2021  n_2022 admission setting region 
 ##   &lt;chr&gt;                                  &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;  
 ## 1 The Crown Estate, Windsor Great Park 5400000 5636844 Free      O       South …</code></pre>
-<pre class="r"><code>visitors &lt;- read_csv(&quot;data/UK-visitor-numbers.csv&quot;)</code></pre>
-<pre><code>## Rows: 348 Columns: 6
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr (4): attraction, admission, setting, region
-## dbl (2): n_2021, n_2022
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <pre class="r"><code>filteredVisitors &lt;- filter(visitors, setting == &quot;O&quot; &amp; admission == &quot;Members&quot; &amp; region == &quot;Yorkshire and the Humber&quot; &amp;  n_2022 &gt; 100000 )
 filteredVisitors</code></pre>
 <pre><code>## # A tibble: 3 × 6
@@ -546,16 +519,20 @@ visitors %&gt;% count(admission, setting)</code></pre>
 ## # ℹ 6 variables: attraction &lt;chr&gt;, n_2021 &lt;dbl&gt;, n_2022 &lt;dbl&gt;, admission &lt;chr&gt;,
 ## #   setting &lt;chr&gt;, region &lt;chr&gt;</code></pre>
 <p>There are no attractions which had 565722 visitors.</p>
+<p>My code the in same as the answers. Why does my result not show
+anything when the solution shows one attraction?</p>
 </div>
 <div id="exercise-e." class="section level3">
 <h3>Exercise e.</h3>
 <p><em>How many attraction had more than 1 million visitors in
 2022?</em></p>
-<pre class="r"><code>visitors %&gt;% filter(n_2022 &gt; 1000000) %&gt;% count()</code></pre>
-<pre><code>## # A tibble: 1 × 1
-##       n
-##   &lt;int&gt;
-## 1    22</code></pre>
+<pre class="r"><code># visitors %&gt;% filter(n_2022 &gt; 1000000) %&gt;% count()
+visitors %&gt;% count(n_2022 &gt; 1000000)</code></pre>
+<pre><code>## # A tibble: 2 × 2
+##   `n_2022 &gt; 1e+06`     n
+##   &lt;lgl&gt;            &lt;int&gt;
+## 1 FALSE              326
+## 2 TRUE                22</code></pre>
 </div>
 </div>
 <div id="question-5" class="section level2">
@@ -576,14 +553,24 @@ visitors in 2022?</em></p>
 ##       n
 ##   &lt;int&gt;
 ## 1     3</code></pre>
+<p>There are 3.</p>
 <div id="exercise-f." class="section level3">
 <h3>Exercise f.</h3>
 <p><em>How many attractions had between 50,000 and 100,000 visitors in
 2022?</em></p>
+<pre class="r"><code>visitors %&gt;% 
+  filter(
+    n_2022 &gt; 50000,
+    n_2022 &lt; 100000 ) %&gt;%
+  count()</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##       n
+##   &lt;int&gt;
+## 1    50</code></pre>
 <pre class="r"><code>#visitors %&gt;% 
-#  ____(
-#    ______,
-#    ______ ) %&gt;%
+#  filter(
+#    n_2022 &gt; 50000 &amp;
+#    n_2022 &lt; 100000 ) %&gt;%
 #  count()</code></pre>
 </div>
 <div id="exercise-g." class="section level3">
@@ -591,9 +578,13 @@ visitors in 2022?</em></p>
 <p><em>How many regions have more than 50 tourist attraction in the data
 set? (Hint: You will need to tabulate the data before
 filtering.)</em></p>
-<pre class="r"><code>#visitors %&gt;% 
-#  _____(region) %&gt;%
-#  filter(______)</code></pre>
+<pre class="r"><code>visitors %&gt;% 
+  count(region) %&gt;%
+  filter(n &gt; 50)</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   region       n
+##   &lt;chr&gt;    &lt;int&gt;
+## 1 Scotland    97</code></pre>
 </div>
 </div>
 </div>

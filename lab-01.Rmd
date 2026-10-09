@@ -25,20 +25,17 @@ visitors <- read_csv("data/UK-visitor-numbers.csv")
 ## Warm up
 
 ```{r WarmUp Q1}
-visitors <- read_csv("data/UK-visitor-numbers.csv")
 nondups <- filter(visitors, !duplicated(attraction))
 nondups
 ```
 
 ```{r WarmUp Q3}
-visitors <- read_csv("data/UK-visitor-numbers.csv")
 highestVisitors2022 <- filter(visitors, n_2022 == max(n_2022, na.rm = TRUE))
 highestVisitors2022
 ```
 
 
 ```{r WarmUp Q5}
-visitors <- read_csv("data/UK-visitor-numbers.csv")
 filteredVisitors <- filter(visitors, setting == "O" & admission == "Members" & region == "Yorkshire and the Humber" &  n_2022 > 100000 )
 filteredVisitors
 ```
@@ -122,12 +119,17 @@ visitors %>% filter(n_2022 == 565722)
 
 There are no attractions which had 565722 visitors.
 
+My code the in same as the answers. Why does my result not show anything when the solution shows one attraction?
+
 ### Exercise e.
 
 _How many attraction had more than 1 million visitors in 2022?_
 
 ```{r Ex_e}
-visitors %>% filter(n_2022 > 1000000) %>% count()
+# visitors %>% filter(n_2022 > 1000000) %>% count()
+visitors %>% count(n_2022 > 1000000)
+
+
 ```
 
 ## Question 5
@@ -145,15 +147,23 @@ visitors %>%
   count()
 ```
 
+There are 3.
+
 ### Exercise f.
 
 _How many attractions had between 50,000 and 100,000 visitors in 2022?_
 
 ```{r Ex_f}
+visitors %>% 
+  filter(
+    n_2022 > 50000,
+    n_2022 < 100000 ) %>%
+  count()
+
 #visitors %>% 
-#  ____(
-#    ______,
-#    ______ ) %>%
+#  filter(
+#    n_2022 > 50000 &
+#    n_2022 < 100000 ) %>%
 #  count()
 ```
 
@@ -162,9 +172,9 @@ _How many attractions had between 50,000 and 100,000 visitors in 2022?_
 _How many regions have more than 50 tourist attraction in the data set? (Hint: You will need to tabulate the data before filtering.)_
 
 ```{r Ex_g}
-#visitors %>% 
-#  _____(region) %>%
-#  filter(______)
+visitors %>% 
+  count(region) %>%
+  filter(n > 50)
 ```
 
 
